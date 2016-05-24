@@ -46,4 +46,8 @@ module.exports = {
 
   '--topbarHeight': '80px',
   '--topbarLogoHeight': '40px',
+
+  // SearchBar
+  '--SearchBar_borderColor': 'rgba(169, 172, 176, 0.5)',
+  '--SearchBar_borderColorActive': 'rgb(122, 125, 128)',
 };
