@@ -18,13 +18,13 @@ try {
  * addDefaultOpts([1, 2, 3, {locale: "fr"}], {locale: "en"}) => [1, 2, 3, {locale: "fr"}]
  */
 function addDefaultOpts(args, defaultOpts) {
-  args = _.toArray(args);
-  const last = _.last(args);
+  const argsArray = _.toArray(args);
+  const last = _.last(argsArray);
 
   if (last && _.isObject(last)) {
-    return _.initial(args).concat([_.assign({}, defaultOpts, last)]);
+    return _.initial(argsArray).concat([_.assign({}, defaultOpts, last)]);
   } else {
-    return args.concat([defaultOpts]);
+    return argsArray.concat([defaultOpts]);
   }
 }
 
@@ -33,12 +33,12 @@ function routeNameToPathFnName(routeName) {
 }
 
 function createSubset(fnNames, defaultOpts) {
-  return fnNames.reduce(function(routeObject, fnName) {
+  return fnNames.reduce((routeObject, fnName) => {
     const pathFn = Routes[fnName];
 
     if (pathFn) {
-      const withDefaultOptsFn = function withDefaultOpts() {
-        return pathFn.apply(null, addDefaultOpts(arguments, defaultOpts));
+      const withDefaultOptsFn = function withDefaultOpts(...args) {
+        return pathFn(...addDefaultOpts(args, defaultOpts));
       };
 
       // Copy the toString function.
@@ -47,8 +47,9 @@ function createSubset(fnNames, defaultOpts) {
       // single_conversation_path.toString => (/:locale)/:person_id/messages/:conversation_type/:id(.:format)
       withDefaultOptsFn.toString = pathFn.toString;
 
-      routeObject[fnName] = withDefaultOptsFn;
-      return routeObject;
+      const newRoute = {};
+      newRoute[fnName] = withDefaultOptsFn;
+      return _.assign({}, routeObject, newRoute);
     } else {
       throw new Error(`Couldn't find named route: '${fnName}'`);
     }
@@ -61,18 +62,16 @@ function createSubset(fnNames, defaultOpts) {
  * You can pass also `defaultOpts` object, for example for "locale"
  */
 function subset(routesSubset, defaultOpts = {}) {
-  return createSubset(routesSubset.map(pathNameToPathFnName), defaultOpts);
+  return createSubset(routesSubset.map(routeNameToPathFnName), defaultOpts);
 }
 
 /**
  * Returns all routes. Use this ONLY in styleguide or in tests.
  */
-function _all(defaultOpts) {
-  const allRoutes = _.keys(Routes).filter(function(key) {
-    return _.endsWith(key, '_path');
-  });
+function all(defaultOpts) {
+  const allRoutes = _.keys(Routes).filter((key) => _.endsWith(key, '_path'));
 
   return createSubset(allRoutes, defaultOpts);
 }
 
-export { subset, _all };
+export { subset, all };

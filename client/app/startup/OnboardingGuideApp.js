@@ -14,7 +14,7 @@ export default (props, railsContext) => {
   initializeEnvironment(railsContext, process.env.NODE_ENV);
 
   const routes = subset([
-    "admin_getting_started_guide_slogan_and_description"
+    'admin_getting_started_guide_slogan_and_description',
   ]);
 
   const combinedReducer = combineReducers(reducers);
