@@ -1,4 +1,4 @@
-import { storiesOf } from '@kadira/storybook';
+import { storiesOf, action } from '@kadira/storybook';
 import withProps from '../Styleguide/withProps';
 
 import SearchBar from './SearchBar';
@@ -6,6 +6,9 @@ import SearchBar from './SearchBar';
 const defaultProps = {
   keywordPlaceholder: 'Search...',
   locationPlaceholder: 'Location',
+  onSubmit(v) {
+    action('SearchBar submit')(v);
+  },
 };
 
 storiesOf('Top bar search')

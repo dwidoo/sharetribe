@@ -1,18 +1,33 @@
 .root {
   display: inline-block;
   position: relative;
-  border: 1px solid var(--SearchBar_borderColor);
-  border-radius: 10em;
   padding: 0 2em 0 1em;
   height: 2.4em;
   overflow: hidden;
 
-  /* The root component cannot change its styles based on the inputs'
-     focus state, so we are forced to handle the focus state in JS. */
-  &:hover,
-  &.focus {
+  &:hover .focusContainer:before {
     border-color: var(--SearchBar_borderColorActive);
   }
+
+  /* When any child element of this form has focus, hilight the whole
+     form using a pseudo element. See: http://stackoverflow.com/a/11167056 */
+  & *:focus ~ .focusContainer:before {
+    border-color: var(--SearchBar_borderColorActive);
+  }
+}
+
+/* Since we cannot apply focus styles straight to the form when
+   anything within it has focus, we have to create a special container
+   for the focus styles to cover the whole form area. */
+.focusContainer:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid var(--SearchBar_borderColor);
+  border-radius: 10em;
 }
 
 .keywordInput,
@@ -28,6 +43,13 @@
   &:focus {
     width: 16em;
     outline: none;
+
+    /* Trigger focus styles for the search icon SVG when these inputs have focus. */
+    /* ID values within the inline SVG should not be mangled by CSS modules. */
+    & ~ .searchButton :global(#line),
+    & ~ .searchButton :global(#Oval) {
+      stroke: var(--SearchBar_borderColorActive);
+    }
   }
 }
 
@@ -54,20 +76,18 @@
   &:focus {
     outline: none;
     border-bottom: 2px solid var(--SearchBar_borderColor);
+
+    & :global(#line),
+    & :global(#Oval) {
+      stroke: var(--SearchBar_borderColorActive);
+    }
   }
 
-  /* ID value within the inline SVG should not be mangled by CSS modules. */
   & :global(#line),
   & :global(#Oval) {
     stroke: var(--SearchBar_borderColor);
 
-    /* cssnext doesn't understand the comma separator with these two
-       rules, so we have to make some repetition. */
     @nest .root:hover & {
-      stroke: var(--SearchBar_borderColorActive);
-    }
-
-    @nest .focus & {
       stroke: var(--SearchBar_borderColorActive);
     }
   }
