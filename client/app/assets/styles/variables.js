@@ -48,6 +48,7 @@ module.exports = {
   '--topbarLogoHeight': '40px',
 
   // SearchBar
+  '--SearchBar_width': '24em',
   '--SearchBar_borderColor': 'rgba(169, 172, 176, 0.5)',
   '--SearchBar_borderColorActive': 'rgb(122, 125, 128)',
   '--SearchBar_textColor': 'rgb(122, 125, 128)',
@@ -56,4 +57,8 @@ module.exports = {
   '--SearchBar_iconColor': 'rgb(122, 125, 128)',
   '--SearchBar_iconColorActive': 'rgb(82, 89, 97)',
   '--SearchBar_iconColorFocus': 'rgb(28, 30, 33)',
+  '--SearchBar_fontFamily': "'Proxima Nova Soft', Helvetica, sans",
+  '--SearchBar_fontSize': '14px',
+  '--SearchBar_lineHeight': '1.6',
+  '--SearchBar_textPadding': '0.5em',
 };

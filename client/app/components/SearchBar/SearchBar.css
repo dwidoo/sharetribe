@@ -2,16 +2,17 @@
   display: inline-flex;
   position: relative;
   padding: 0 1em;
-  height: 2.4em;
-  width: 24em;
+  width: var(--SearchBar_width);
 
-  &:hover .focusContainer:before {
+  &:hover .focusContainer::before {
     border-color: var(--SearchBar_borderColorActive);
   }
 
   /* When any child element of this form has focus, hilight the whole
      form using a pseudo element. See: http://stackoverflow.com/a/11167056 */
-  & *:focus ~ .focusContainer:before {
+  & .keywordInput:focus ~ .focusContainer::before,
+  & .locationInput:focus ~ .focusContainer::before,
+  & .searchButton:focus ~ .focusContainer::before {
     border-color: var(--SearchBar_borderColorActive);
   }
 }
@@ -19,7 +20,7 @@
 /* Since we cannot apply focus styles straight to the form when
    anything within it has focus, we have to create a special container
    for the focus styles to cover the whole form area. */
-.focusContainer:before {
+.focusContainer::before {
   content: '';
   position: absolute;
   top: 0;
@@ -27,19 +28,22 @@
   right: 0;
   bottom: 0;
   border: 1px solid var(--SearchBar_borderColor);
-  border-radius: 10em;
+  border-radius: 10em; /* Big enough to be fully rounded */
   z-index: -1; /* Required to allow mouse event to the inputs/buttons. */
 }
 
 .keywordInput,
 .locationInput {
-  margin: 0.5em 0.5em 0.5em 0;
+  margin: var(--SearchBar_textPadding) var(--SearchBar_textPadding) var(--SearchBar_textPadding) 0;
   padding: 0;
-  font-size: 1rem;
-  line-height: 1.6;
+  line-height: var(--SearchBar_lineHeight);
   border: none;
   transition: width 0.25s ease-out;
   color: var(--SearchBar_textColor);
+
+  /* TODO: Move typography overrides to Topbar */
+  font-family: var(--SearchBar_fontFamily);
+  font-size: var(--SearchBar_fontSize);
 
   @nest .root:hover & {
     color: var(--SearchBar_textColorActive);
@@ -62,19 +66,14 @@
   }
 }
 
-.keywordInput {
-  width: 60%
-}
-
-.locationInput {
-  width: 40%;
-}
+.keywordInput { width: 60%; }
+.locationInput { width: 40%; }
 
 /* Additional separating styles are added only when the two inputs are
    next to each other. */
 .keywordInput + .locationInput {
   border-left: 1px solid var(--SearchBar_borderColor);
-  padding-left: 0.5em;
+  padding-left: var(--SearchBar_textPadding);
 }
 
 .searchButton {
