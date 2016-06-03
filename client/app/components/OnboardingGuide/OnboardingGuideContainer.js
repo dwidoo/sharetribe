@@ -24,6 +24,7 @@ function mapStateToProps(state) {
   return {
     data: state.onboarding_guide_page,
     railsContext: state.railsContext,
+    routes: state.routes,
   };
 }
 
