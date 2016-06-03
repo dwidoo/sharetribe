@@ -1,9 +1,9 @@
 .root {
-  display: inline-block;
+  display: inline-flex;
   position: relative;
-  padding: 0 2em 0 1em;
+  padding: 0 1em;
   height: 2.4em;
-  overflow: hidden;
+  width: 24em;
 
   &:hover .focusContainer:before {
     border-color: var(--SearchBar_borderColorActive);
@@ -33,23 +33,41 @@
 
 .keywordInput,
 .locationInput {
-  width: 10em;
   margin: 0.5em 0.5em 0.5em 0;
   padding: 0;
   font-size: 1rem;
   line-height: 1.6;
   border: none;
   transition: width 0.25s ease-out;
+  color: var(--SearchBar_textColor);
+
+  @nest .root:hover & {
+    color: var(--SearchBar_textColorActive);
+
+    &:focus {
+      /* focus color should override the active color */
+      color: var(--SearchBar_textColorFocus);
+    }
+  }
 
   &:focus {
-    width: 16em;
+    width: 90%;
     outline: none;
+    color: var(--SearchBar_textColorFocus);
 
     /* Trigger focus styles for the search icon SVG when these inputs have focus. */
     & ~ .searchButton svg {
-      stroke: var(--SearchBar_borderColorActive);
+      stroke: var(--SearchBar_iconColorActive);
     }
   }
+}
+
+.keywordInput {
+  width: 60%
+}
+
+.locationInput {
+  width: 40%;
 }
 
 /* Additional separating styles are added only when the two inputs are
@@ -60,9 +78,6 @@
 }
 
 .searchButton {
-  position: absolute;
-  top: 1em;
-  right: 1em;
   padding: 0;
   border: none;
   background-color: transparent;
@@ -70,19 +85,23 @@
   & svg {
     width: 1.6em;
     height: 1.6em;
-    stroke: var(--SearchBar_borderColor);
+    stroke: var(--SearchBar_iconColor);
 
     @nest .root:hover & {
-      stroke: var(--SearchBar_borderColorActive);
+      stroke: var(--SearchBar_iconColorActive);
+
+      &:hover {
+        stroke: var(--SearchBar_iconColorFocus);
+      }
     }
   }
 
   &:focus {
     outline: none;
-    border-bottom: 2px solid var(--SearchBar_borderColor);
 
     & svg {
-      stroke: var(--SearchBar_borderColorActive);
+      stroke: var(--SearchBar_iconColorFocus);
+      outline: 1px solid var(--SearchBar_borderColor);
     }
   }
 }
