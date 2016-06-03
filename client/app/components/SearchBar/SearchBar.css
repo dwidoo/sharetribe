@@ -28,6 +28,7 @@
   bottom: 0;
   border: 1px solid var(--SearchBar_borderColor);
   border-radius: 10em;
+  z-index: -1; /* Required to allow mouse event to the inputs/buttons. */
 }
 
 .keywordInput,
@@ -45,9 +46,7 @@
     outline: none;
 
     /* Trigger focus styles for the search icon SVG when these inputs have focus. */
-    /* ID values within the inline SVG should not be mangled by CSS modules. */
-    & ~ .searchButton :global(#line),
-    & ~ .searchButton :global(#Oval) {
+    & ~ .searchButton svg {
       stroke: var(--SearchBar_borderColorActive);
     }
   }
@@ -71,23 +70,18 @@
   & svg {
     width: 1.6em;
     height: 1.6em;
+    stroke: var(--SearchBar_borderColor);
+
+    @nest .root:hover & {
+      stroke: var(--SearchBar_borderColorActive);
+    }
   }
 
   &:focus {
     outline: none;
     border-bottom: 2px solid var(--SearchBar_borderColor);
 
-    & :global(#line),
-    & :global(#Oval) {
-      stroke: var(--SearchBar_borderColorActive);
-    }
-  }
-
-  & :global(#line),
-  & :global(#Oval) {
-    stroke: var(--SearchBar_borderColor);
-
-    @nest .root:hover & {
+    & svg {
       stroke: var(--SearchBar_borderColorActive);
     }
   }
