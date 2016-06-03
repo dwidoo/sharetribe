@@ -34,8 +34,8 @@
 
 .keywordInput,
 .locationInput {
-  margin: var(--SearchBar_textPadding) var(--SearchBar_textPadding) var(--SearchBar_textPadding) 0;
-  padding: 0;
+  margin: var(--SearchBar_textPadding) 0 var(--SearchBar_textPadding) 0;
+  padding: 0 var(--SearchBar_textPadding) 0 0;
   line-height: var(--SearchBar_lineHeight);
   border: none;
   transition: width 0.25s ease-out;

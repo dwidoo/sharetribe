@@ -59,6 +59,6 @@ module.exports = {
   '--SearchBar_iconColorFocus': 'rgb(28, 30, 33)',
   '--SearchBar_fontFamily': "'Proxima Nova Soft', Helvetica, sans",
   '--SearchBar_fontSize': '14px',
-  '--SearchBar_lineHeight': '1.6',
+  '--SearchBar_lineHeight': '2.2',
   '--SearchBar_textPadding': '0.5em',
 };
