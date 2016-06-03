@@ -13,34 +13,48 @@ const SEARCH_MODES = [
   SEARCH_MODE_KEYWORD_AND_LOCATION,
 ];
 
-const searchInput = (className, placeholder) => input({
-  className,
-  type: 'search',
-  placeholder,
-});
-
 class SearchBar extends Component {
+  constructor(props) {
+    super(props);
+
+    // The values of the inputs are synced to the component state
+    // until the form is submitted.
+    this.state = {
+      keyword: '',
+      location: '',
+    };
+  }
   handleSubmit(e) {
     e.preventDefault();
-    this.props.onSubmit('trololo');
+    this.props.onSubmit(this.state);
   }
   render() {
     const { mode, keywordPlaceholder, locationPlaceholder } = this.props;
-    const inputs = [];
 
-    if (mode === SEARCH_MODE_KEYWORD || mode === SEARCH_MODE_KEYWORD_AND_LOCATION) {
-      inputs.push(searchInput(css.keywordInput, keywordPlaceholder));
-    }
-    if (mode === SEARCH_MODE_LOCATION || mode === SEARCH_MODE_KEYWORD_AND_LOCATION) {
-      inputs.push(searchInput(css.locationInput, locationPlaceholder));
-    }
+    const keywordInput = input({
+      type: 'search',
+      className: css.keywordInput,
+      placeholder: keywordPlaceholder,
+      onChange: (e) => this.setState({ keyword: e.target.value }), // eslint-disable-line react/no-set-state
+    });
+    const locationInput = input({
+      type: 'search',
+      className: css.locationInput,
+      placeholder: locationPlaceholder,
+      onChange: (e) => this.setState({ location: e.target.value }), // eslint-disable-line react/no-set-state
+    });
+
+    const hasKeywordInput = mode === SEARCH_MODE_KEYWORD || mode === SEARCH_MODE_KEYWORD_AND_LOCATION;
+    const hasLocationInput = mode === SEARCH_MODE_LOCATION || mode === SEARCH_MODE_KEYWORD_AND_LOCATION;
+
     return form({
       classSet: {
         [css.root]: true,
       },
       onSubmit: this.handleSubmit.bind(this),
     }, [
-      ...inputs,
+      hasKeywordInput ? keywordInput : null,
+      hasLocationInput ? locationInput : null,
       button({
         type: 'submit',
         className: css.searchButton,
