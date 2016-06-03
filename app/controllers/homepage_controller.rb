@@ -53,7 +53,7 @@ class HomepageController < ApplicationController
     main_search = location_search_available ? MarketplaceService::API::Api.configurations.get(community_id: @current_community.id).data[:main_search] : :keyword
     location_search_in_use = main_search == :location
 
-    params[:sort] = :distance if @view_type == "map" # change to bounding box when implemented
+    # result_sort = :distance if @view_type == "map" # change to bounding box when implemented
 
     search_result = find_listings(params, per_page, compact_filter_params, includes.to_set, location_search_in_use)
 
@@ -159,7 +159,8 @@ class HomepageController < ApplicationController
     coordinates = Maybe(params[:lc]).map { search_coordinates(params[:lc]) }.or_else({})
     distance_unit = (location_search_in_use && MarketplaceService::API::Api.configurations.get(community_id: @current_community.id).data[:distance_unit] == :metric) ? :km : :miles
 
-    distance_max = [5, params[:distance_max]].max if params[:distance_max].present?
+    distance_max = [5, params[:distance_max].to_f].max if params[:distance_max].present?
+    result_sort = :distance if coordinates.present? && @view_type != "map" # classic map needs all listings. It doesn't support panning and zooming
 
     search = {
       # Add listing_id
@@ -169,14 +170,14 @@ class HomepageController < ApplicationController
       keywords: filter_params[:search],
       latitude: coordinates[:latitude],
       longitude: coordinates[:longitude],
+      distance_max: distance_max,
       distance_unit: distance_unit,
       fields: checkboxes.concat(dropdowns).concat(numbers),
       per_page: listings_per_page,
       page: Maybe(params)[:page].to_i.map { |n| n > 0 ? n : 1 }.or_else(1),
       price_min: params[:price_min],
       price_max: params[:price_max],
-      distance_max: distance_max,
-      sort: params[:sort],
+      sort: result_sort,
       locale: I18n.locale,
       include_closed: false
     }

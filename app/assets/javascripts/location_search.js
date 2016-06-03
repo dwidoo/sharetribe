@@ -23,12 +23,12 @@ window.ST = window.ST || {};
 
       var lat1 = a.lat();
       var lat2 = b.lat();
-      var lon1 = a.lng();
-      var lon2 = b.lng();
+      var lng1 = a.lng();
+      var lng2 = b.lng();
       var φ1 = toRadians(lat1);
-      var φ2 = toRadians(lat1);
+      var φ2 = toRadians(lat2);
       var Δφ = toRadians(lat2-lat1);
-      var Δλ = toRadians(lon2-lon1);
+      var Δλ = toRadians(lng2-lng1);
 
       var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
               Math.cos(φ1) * Math.cos(φ2) *
@@ -49,6 +49,8 @@ window.ST = window.ST || {};
             var boundingboxRadius = computeScale(place.geometry.viewport.getNorthEast(), place.geometry.viewport.getSouthWest());
             boundingboxInput.value = place.geometry.viewport.toUrlValue();
             maxDistanceInput.value = boundingboxRadius;
+          } else {
+            maxDistanceInput.value = 1;
           }
           homepageForm.submit();
         } else {
